@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Private &amp; Scalable Blockchain Voting Using Zero-Knowledge Proofs — Hoang Phuc Le</title>
+  <meta name="description"
+    content="MSc Thesis: Private and Scalable Blockchain Voting Using Zero-Knowledge Proofs. A zk-rollup-inspired architecture for secure, private, and cost-efficient decentralised elections." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ===================== Mobile Toggle ===================== -->
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Open navigation menu">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ===================== Sidebar ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <!-- Header -->
+    <div class="sidebar-header">
+      <img src="images/avatar.jpg" alt="Hoang Phuc Le" class="sidebar-avatar" />
+      <div class="sidebar-name">Hoang Phuc Le</div>
+      <div class="sidebar-subtitle">MSc Thesis Showcase</div>
+      <p class="sidebar-thesis-title">20115747</p>
+      <p class="sidebar-description">20115747@setu.ie</p>
+    </div>
+
+    <!-- Resource Buttons -->
+    <div class="sidebar-resources">
+      <a href="https://github.com/hoangphuc552001/blockchain-voting-zk-rollup" class="resource-btn" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+        GitHub Repository
+      </a>
+      <a href="#" class="resource-btn" onclick="alert('Video demo is currently being completed. Check back soon!'); return false;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Video Demo
+      </a>
+      <a href="files/proposal.pdf" class="resource-btn" download>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Proposal PDF
+      </a>
+      <a href="files/interim-report.pdf" class="resource-btn" download>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Interim Report PDF
+      </a>
+      <a href="files/slide.pdf" class="resource-btn" download>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+        Presentation Slides
+      </a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="sidebar-nav-title">Sections</div>
+      <a href="#overview">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Overview
+      </a>
+      <a href="#problem">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Problem
+      </a>
+      <a href="#solution">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+        Solution
+      </a>
+      <a href="#architecture">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+        Architecture
+      </a>
+      <a href="#features">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        Features
+      </a>
+      <a href="#technologies">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+        Technologies
+      </a>
+      <a href="#results">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Results
+      </a>
+      <a href="#future-work">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+        Future Work
+      </a>
+    </nav>
+
+    <!-- Project Info Card -->
+    <div class="sidebar-info-card">
+      <h4>Project Info</h4>
+      <div class="info-row">
+        <span class="info-label">Programme</span>
+        <span class="info-value">MSc in Computer Science<br>(Enterprise Software Systems)</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Type</span>
+        <span class="info-value">Thesis</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Topic</span>
+        <span class="info-value">Blockchain Voting with Zero-Knowledge Rollup</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Stack</span>
+        <span class="info-value">Ethereum, Solidity, Circom,<br>SnarkJS, Smart Contracts</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Area</span>
+        <span class="info-value">Computer Security, Software Development, Information System and Modelling</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== Main Content ===================== -->
+  <main class="main-content">
+
+    <!-- ===== Hero (Two-Column) ===== -->
+    <section class="hero" id="hero">
+      <span class="hero-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+        </svg>
+        MSc Thesis Research
+      </span>
+      <div class="hero-two-col">
+        <div class="hero-left">
+          <h1>Optimising Blockchain Voting with <span class="gradient-text">Zero-Knowledge Rollup Layer 2</span></h1>
+          <p class="hero-subtitle">Blockchain Voting with Zero-Knowledge Rollup</p>
+        </div>
+        <div class="hero-right" id="overview">
+          <h2>Summary</h2>
+          <p>This project explores how blockchain voting can be improved using <strong>Zero-Knowledge Proofs</strong> and a <strong>zk-Rollup Layer-2 architecture</strong>. It addresses three key challenges in blockchain elections: scalability, transaction cost, and voter privacy. By processing votes off-chain and submitting validity proofs to Ethereum Layer 1, the system improves efficiency and reduces cost. Zero-Knowledge Proofs also help protect voter anonymity, prevent double voting, and support verifiable election results.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Problem ===== -->
+    <section class="section" id="problem">
+      <span class="section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Problem
+      </span>
+      <h2>The Problem</h2>
+      <p class="section-description">
+        While blockchain provides an immutable and transparent ledger, using it directly for voting introduces several
+        significant challenges that must be addressed before real-world adoption is viable.
+      </p>
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="problem-number">1</div>
+          <div>
+            <h3>Scalability Limitations</h3>
+            <p>Public blockchains have limited throughput. Recording every individual vote as an on-chain transaction
+              severely constrains the number of voters the system can support in a reasonable time-frame.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-number">2</div>
+          <div>
+            <h3>High Transaction Costs</h3>
+            <p>Each on-chain transaction incurs gas fees. In a large election, the cumulative cost of recording
+              thousands or millions of votes can become prohibitively expensive.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-number">3</div>
+          <div>
+            <h3>Privacy Concerns</h3>
+            <p>Blockchain's inherent transparency means that vote data, if stored directly, can potentially be linked to
+              voters — undermining the secret ballot principle essential to democratic elections.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="problem-number">4</div>
+          <div>
+            <h3>Transparency &amp; Verifiability</h3>
+            <p>Election systems must allow independent verification of results without compromising individual voter
+              privacy — a delicate balance that traditional systems struggle to achieve.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Solution ===== -->
+    <section class="section" id="solution">
+      <span class="section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+        Solution
+      </span>
+      <h2>Proposed Solution</h2>
+      <p class="section-description">
+        The proposed approach combines <strong>zero-knowledge proofs</strong> with a <strong>zk-rollup-inspired
+          off-chain/on-chain architecture</strong> to solve the scalability, cost, and privacy challenges
+        simultaneously.
+      </p>
+      <div class="solution-content">
+        <div class="solution-text">
+          <p>
+            Voters generate <strong>zero-knowledge proofs</strong> using <strong>Circom</strong> circuits and
+            <strong>SnarkJS</strong> that attest to the validity of their vote — confirming eligibility and choice —
+            without revealing any identifying information.
+          </p>
+          <p>
+            These proofs are processed <strong>off-chain</strong> in batches, significantly reducing the number of
+            on-chain transactions. A batch proof is then submitted to an Ethereum <strong>Solidity smart
+              contract</strong>, which acts as a verifier.
+          </p>
+          <p>
+            The smart contract validates the aggregated proof on-chain, updating the election state at a fraction of the
+            cost. This approach ensures that the blockchain serves as a <strong>trust anchor</strong> — guaranteeing
+            integrity without bearing the full computational load.
+          </p>
+        </div>
+        <div class="solution-highlights">
+          <div class="solution-highlight">
+            <div class="solution-highlight-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            ZK proofs hide voter identity &amp; choice
+          </div>
+          <div class="solution-highlight">
+            <div class="solution-highlight-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            Off-chain batch processing boosts scalability
+          </div>
+          <div class="solution-highlight">
+            <div class="solution-highlight-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            On-chain verification at reduced gas cost
+          </div>
+          <div class="solution-highlight">
+            <div class="solution-highlight-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            Smart contract serves as trust anchor
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Architecture ===== -->
+    <section class="section" id="architecture">
+      <span class="section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+        Architecture
+      </span>
+      <h2>System Architecture</h2>
+      <p class="section-description">
+        The system follows a two-layer zk-Rollup design. Layer 1 (Ethereum) anchors election integrity,
+        while Layer 2 handles vote processing off-chain through a three-phase privacy-preserving protocol.
+      </p>
+
+      <!-- ====== Architecture diagrams (styled like architecture.png) ====== -->
+      <div class="arch-diagrams-sheet">
+        <!-- ====== DIAGRAM 1: L1/L2 Architecture ====== -->
+        <div class="arch-diagram-title">
+          <span class="arch-fig-num">Fig. 1</span> zk-Rollup Blockchain Voting Architecture
+        </div>
+
+        <div class="arch-canvas">
+          <!-- L1 Layer -->
+          <div class="arch-layer arch-layer-l1">
+            <div class="arch-layer-label">Ethereum Main Layer-1</div>
+            <div class="arch-layer-nodes">
+              <div class="arch-node arch-node-l1 arch-node-merkle" style="--i:0">
+                <strong>Eligibility Merkle Root</strong>
+                <span class="arch-tag arch-tag-setup">Setup</span>
+              </div>
+              <div class="arch-arrow-h">
+                <div class="arch-arrow-particle"></div>
+              </div>
+              <div class="arch-node arch-node-l1 arch-node-l1-verify" style="--i:1">
+                <strong>L1 Verifier Contract</strong>
+                <span class="arch-node-detail">Solidity on-chain verifier</span>
+              </div>
+              <div class="arch-arrow-h">
+                <div class="arch-arrow-particle"></div>
+              </div>
+              <div class="arch-node arch-node-l1 arch-node-l1-solid" style="--i:2">
+                <strong>Final Result Commitment</strong>
+                <span class="arch-node-detail">Immutable election outcome</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bridge L1 ↔ L2 -->
+          <div class="arch-layer-bridge">
+            <div class="arch-bridge-line"></div>
+            <div class="arch-bridge-particle"></div>
+            <span class="arch-bridge-label">Batch Proof &amp; State Root</span>
+          </div>
+
+          <!-- L2 Layer -->
+          <div class="arch-layer arch-layer-l2">
+            <div class="arch-layer-label">zk-Rollup Execution Layer (Layer-2)</div>
+
+            <div class="arch-l2-grid">
+              <!-- Row 1: Voter → Sequencer → Aggregator -->
+              <div class="arch-node arch-node-voter" style="--i:0">
+                <strong>Voter Client</strong>
+              </div>
+
+              <div class="arch-arrow-h arch-arrow-labeled">
+                <span class="arch-arrow-text">Submit Vote</span>
+                <div class="arch-arrow-particle"></div>
+              </div>
+
+              <div class="arch-node arch-node-seq" style="--i:1">
+                <strong>Sequencer</strong>
+                <span class="arch-node-detail">Order &amp; queue</span>
+                <div class="arch-sub-inline">
+                  <div class="arch-arrow-v-mini"></div>
+                  <div class="arch-mini-node">Batch Votes</div>
+                </div>
+              </div>
+
+              <div class="arch-arrow-h">
+                <div class="arch-arrow-particle"></div>
+              </div>
+
+              <div class="arch-node arch-node-agg" style="--i:2">
+                <strong>Aggregator / Prover</strong>
+                <span class="arch-node-detail">Generate batch ZK proof</span>
+                <div class="arch-sub-inline">
+                  <div class="arch-arrow-v-mini"></div>
+                  <div class="arch-mini-node">Batch Proof &amp; State Root</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Ballot Contract + Data Packet -->
+            <div class="arch-l2-bottom">
+              <div class="arch-node arch-node-ballot" style="--i:3">
+                <strong>L2 Ballot Contract &amp; Nullifier Registry</strong>
+                <div class="arch-ballot-details">
+                  <div class="arch-detail-row">Private Input</div>
+                  <div class="arch-detail-row">Vote Choice</div>
+                  <div class="arch-detail-row">Randomness</div>
+                </div>
+              </div>
+
+              <div class="arch-data-packet" style="--i:4">
+                <span class="arch-pkt arch-pkt-enc">Encrypted Ballot C</span>
+                <span class="arch-pkt-sep">,</span>
+                <span class="arch-pkt arch-pkt-null">Nullifier</span>
+                <span class="arch-pkt-sep">,</span>
+                <span class="arch-pkt arch-pkt-zkp">ZKP of Merkle Membership</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== DIAGRAM 2: Three-Phase Privacy Protocol ====== -->
+        <div class="arch-diagram-title" style="margin-top: 48px;">
+          <span class="arch-fig-num">Fig. 2</span> Privacy-Preserving zk-Rollup Voting Protocol (Three Phases)
+        </div>
+
+        <div class="arch-phases-v2">
+          <!-- Phase 1 + Phase 2 side by side -->
+          <div class="arch-phases-top">
+
+            <!-- Phase 1 -->
+            <div class="arch-phase-v2 arch-phase-acad" style="--phase-color: #059669; --pi: 0">
+              <div class="arch-phase-header-v2">
+                <span class="arch-phase-num">1</span>
+                Phase 1: Voter Authentication &amp; Eligibility
+              </div>
+              <div class="arch-phase-body-v2 arch-acad-body">
+                <div class="arch-acad-section">
+                  <div class="arch-acad-label">Private Inputs</div>
+                  <ul class="arch-acad-list">
+                    <li>Secret key <code>S<sub>key</sub></code></li>
+                    <li>Merkle path (sibling hashes)</li>
+                    <li>Random nonce <code>R</code></li>
+                  </ul>
+                </div>
+
+                <div class="arch-phase-flow-v">
+                  <div class="arch-flow-line-v"></div>
+                </div>
+
+                <div class="arch-acad-section">
+                  <div class="arch-acad-label">ZK Circuit</div>
+                  <div class="arch-acad-formula">
+                    <code>Prove( S<sub>key</sub> ∈ MerkleTree )</code>
+                  </div>
+                  <p class="arch-acad-desc">Voter proves membership in the eligibility Merkle tree without revealing
+                    which leaf they occupy.</p>
+                </div>
+
+                <div class="arch-phase-flow-v">
+                  <div class="arch-flow-line-v"></div>
+                </div>
+
+                <div class="arch-acad-section">
+                  <div class="arch-acad-label">Public Outputs</div>
+                  <ul class="arch-acad-list">
+                    <li>Nullifier: <code>H(S<sub>key</sub> ‖ ElectionID)</code></li>
+                    <li>ZKP<sub>eligibility</sub></li>
+                  </ul>
+                  <p class="arch-acad-desc">The nullifier is a one-way hash — it prevents double-voting but cannot be
+                    linked back to the voter's identity.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="arch-phase-v2 arch-phase-acad" style="--phase-color: #7c3aed; --pi: 1">
+              <div class="arch-phase-header-v2">
+                <span class="arch-phase-num">2</span>
+                Phase 2: Ballot Encryption &amp; Batch Proving
+              </div>
+              <div class="arch-phase-body-v2 arch-acad-body">
+                <div class="arch-acad-section">
+                  <div class="arch-acad-label">Private Inputs</div>
+                  <ul class="arch-acad-list">
+                    <li>Vote choice <code>B</code> (plaintext ballot)</li>
+                    <li>Encryption randomness <code>r</code></li>
+                  </ul>
+                </div>
+
+                <div class="arch-phase-flow-v">
+                  <div class="arch-flow-line-v"></div>
+                </div>
+
+                <div class="arch-acad-section">
+                  <div class="arch-acad-label">ZK Circuit</div>
+                  <div class="arch-acad-formula">
+                    <code>C = Enc(B, r)</code> &nbsp;→&nbsp; <code>ZKP<sub>ballot</sub></code>
+                  </div>
+                  <p class="arch-acad-desc">The ballot is encrypted and a ZK proof attests the ciphertext encodes a
+                    valid candidate — without revealing the vote.</p>
+                </div>
+
+                <div class="arch-phase-flow-v">
+                  <div class="arch-flow-line-v"></div>
+                </div>
+
+                <div class="arch-acad-section">
+                  <div class="arch-acad-label">Public Outputs</div>
+                  <ul class="arch-acad-list">
+                    <li>Encrypted ballot <code>C</code></li>
+                    <li>Nullifier &amp; <code>ZKP<sub>ballot</sub></code></li>
+                  </ul>
+                </div>
+
+                <div class="arch-phase-flow-v">
+                  <div class="arch-flow-line-v"></div>
+                </div>
+
+                <div class="arch-acad-section">
+                  <div class="arch-acad-label">Aggregator</div>
+                  <p class="arch-acad-desc">Collects <em>N</em> encrypted ballots, generates a single
+                    <code>ZKP<sub>batch</sub></code> proving all votes valid, and submits the batch proof + state root
+                    to L1.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase 3 (full width) -->
+          <div class="arch-phase-v2 arch-phase-acad arch-phase-full" style="--phase-color: #2563eb; --pi: 2">
+            <div class="arch-phase-header-v2">
+              <span class="arch-phase-num">3</span>
+              Phase 3: Homomorphic Tallying &amp; Verifiable Decryption
+            </div>
+            <div class="arch-phase-body-v2 arch-acad-body arch-acad-p3">
+              <!-- Step A -->
+              <div class="arch-acad-section">
+                <div class="arch-acad-label">Homomorphic Aggregation</div>
+                <div class="arch-acad-formula">
+                  <code>C<sub>tally</sub> = C<sub>1</sub> ⊕ C<sub>2</sub> ⊕ … ⊕ C<sub>N</sub></code>
+                </div>
+                <p class="arch-acad-desc">Encrypted votes are combined without decryption using the additive homomorphic
+                  property of ElGamal.</p>
+              </div>
+
+              <div class="arch-acad-arrow-h">
+                <div class="arch-arrow-h">
+                  <div class="arch-arrow-particle"></div>
+                </div>
+              </div>
+
+              <!-- Step B -->
+              <div class="arch-acad-section">
+                <div class="arch-acad-label">Threshold Decryption</div>
+                <div class="arch-acad-formula">
+                  <code>D(C<sub>tally</sub>) → Result</code>
+                </div>
+                <p class="arch-acad-desc"><em>t</em>-of-<em>n</em> trustees each contribute a decryption share. Only the
+                  aggregate tally is revealed — individual votes remain hidden.</p>
+              </div>
+
+              <div class="arch-acad-arrow-h">
+                <div class="arch-arrow-h">
+                  <div class="arch-arrow-particle"></div>
+                </div>
+              </div>
+
+              <!-- Step C -->
+              <div class="arch-acad-section">
+                <div class="arch-acad-label">Decryption Proof</div>
+                <div class="arch-acad-formula">
+                  <code>ZKP<sub>dec</sub></code>
+                </div>
+                <p class="arch-acad-desc">Each trustee publishes a ZK proof that their decryption share is correct,
+                  preventing malicious decryption without revealing secret key shares.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="arch-legend">
+          <div class="arch-legend-item">
+            <span class="arch-legend-swatch arch-legend-swatch-hatch" style="--lg: #fff8e1; --lgb: #ffc107;"></span>
+            Private Input
+          </div>
+          <div class="arch-legend-item">
+            <span class="arch-legend-swatch" style="background: #e8f5e9; border-color: #4caf50;"></span>
+            Client / Voter
+          </div>
+          <div class="arch-legend-item">
+            <span class="arch-legend-swatch" style="background: #f3e5f5; border-color: #9c27b0;"></span>
+            Public Output to L2
+          </div>
+          <div class="arch-legend-item">
+            <span class="arch-legend-swatch" style="background: #e3f2fd; border-color: #2196f3;"></span>
+            Public Anchor on L1
+          </div>
+          <div class="arch-legend-item">
+            <span class="arch-legend-swatch" style="background: #fce4ec; border-color: #e91e63;"></span>
+            Off-Chain (Optional)
+          </div>
+        </div>
+      </div><!-- .arch-diagrams-sheet -->
+    </section>
+
+    <!-- ===== Features ===== -->
+    <section class="section" id="features">
+      <span class="section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        Features
+      </span>
+      <h2>Key Features</h2>
+      <p class="section-description">
+        The system incorporates several critical features designed to ensure a secure, private, and cost-effective
+        election process.
+      </p>
+      <div class="cards-grid">
+        <!-- Voter Privacy -->
+        <div class="card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <h3>Voter Privacy</h3>
+          <p>Zero-knowledge proofs ensure that individual votes remain completely confidential, preserving the secret
+            ballot principle.</p>
+        </div>
+        <!-- Double-Vote Prevention -->
+        <div class="card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+          </div>
+          <h3>Double-Vote Prevention</h3>
+          <p>Cryptographic nullifiers and on-chain tracking guarantee that each eligible voter can cast exactly one
+            vote.</p>
+        </div>
+        <!-- Verifiable Results -->
+        <div class="card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3>Verifiable Results</h3>
+          <p>Anyone can independently verify the election outcome by checking the on-chain proofs, without needing to
+            trust any authority.</p>
+        </div>
+        <!-- Smart Contract Verification -->
+        <div class="card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+          </div>
+          <h3>Smart Contract Verification</h3>
+          <p>Solidity-based verifier contracts on Ethereum validate ZK proofs on-chain, acting as an immutable trust
+            anchor.</p>
+        </div>
+        <!-- Reduced On-Chain Cost -->
+        <div class="card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3>Reduced On-Chain Cost</h3>
+          <p>Off-chain batch processing and rollup-style aggregation dramatically lower gas fees compared to recording
+            every vote individually.</p>
+        </div>
+        <!-- Secure Election Flow -->
+        <div class="card">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3>Secure Election Flow</h3>
+          <p>End-to-end cryptographic integrity ensures that vote data cannot be tampered with at any stage of the
+            election process.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Technologies ===== -->
+    <section class="section" id="technologies">
+      <span class="section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+        Technologies
+      </span>
+      <h2>Technology Stack</h2>
+      <p class="section-description">
+        The project leverages a modern stack of blockchain and cryptographic tools specifically chosen for building
+        zero-knowledge proof systems on Ethereum.
+      </p>
+      <div class="tech-grid">
+        <div class="tech-badge">
+          <img class="tech-badge-icon" src="https://cdn.simpleicons.org/ethereum/627EEA" alt="Ethereum" />
+          Ethereum
+        </div>
+        <div class="tech-badge">
+          <img class="tech-badge-icon" src="https://cdn.simpleicons.org/solidity/363636" alt="Solidity" />
+          Solidity
+        </div>
+        <div class="tech-badge">
+          <img class="tech-badge-icon" src="https://cdn.simpleicons.org/circleci/7c5cfc" alt="Circom" />
+          Circom
+        </div>
+        <div class="tech-badge">
+          <img class="tech-badge-icon" src="https://cdn.simpleicons.org/javascript/4a8eff" alt="SnarkJS" />
+          SnarkJS
+        </div>
+        <div class="tech-badge">
+          <img class="tech-badge-icon" src="https://cdn.simpleicons.org/hive_blockchain/f59e0b" alt="Smart Contracts" />
+          Smart Contracts
+        </div>
+        <div class="tech-badge">
+          <img class="tech-badge-icon" src="https://cdn.simpleicons.org/letsencrypt/10b981"
+            alt="Zero-Knowledge Proofs" />
+          Zero-Knowledge Proofs
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Results ===== -->
+    <section class="section" id="results">
+      <span class="section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Results
+      </span>
+      <h2>Key Results</h2>
+      <p class="section-description">
+        The evaluation demonstrates that the proposed architecture achieves meaningful improvements across the core
+        objectives for blockchain-based electronic voting.
+      </p>
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3>Lower Cost</h3>
+          <p>Batch proof verification significantly reduces per-vote gas expenditure compared to individual on-chain
+            transactions.</p>
+        </div>
+        <div class="result-card">
+          <div class="result-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <h3>Better Privacy</h3>
+          <p>ZK proofs protect voter identity and vote content, achieving a strong privacy guarantee while allowing
+            result verification.</p>
+        </div>
+        <div class="result-card">
+          <div class="result-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+          </div>
+          <h3>Improved Scalability</h3>
+          <p>Off-chain processing and proof aggregation enable the system to handle a substantially larger number of
+            voters per election cycle.</p>
+        </div>
+        <div class="result-card">
+          <div class="result-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3>Trustworthy Verification</h3>
+          <p>On-chain proof validation provides a transparent and tamper-proof mechanism for anyone to independently
+            confirm election integrity.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Future Work ===== -->
+    <section class="section" id="future-work">
+      <span class="section-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+        Future Work
+      </span>
+      <h2>Future Directions</h2>
+      <p class="section-description">
+        Several avenues for future improvement and extension have been identified to bring the system closer to
+        production readiness.
+      </p>
+      <div class="future-list">
+        <div class="future-item">
+          <div class="future-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <div>
+            <h3>Larger-Scale Performance Testing</h3>
+            <p>Conduct stress tests with significantly larger voter pools to validate the system's behaviour under
+              realistic election-scale loads.</p>
+          </div>
+        </div>
+        <div class="future-item">
+          <div class="future-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+            </svg>
+          </div>
+          <div>
+            <h3>Production-Level Deployment</h3>
+            <p>Address deployment concerns such as gas optimisation, contract upgradeability, key management, and
+              regulatory compliance.</p>
+          </div>
+        </div>
+        <div class="future-item">
+          <div class="future-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div>
+            <h3>Try more ZK Proof Systems</h3>
+            <p>Explore alternative proof systems (e.g., PLONK, Halo2, STARKs) and different cryptographic primitives
+                to compare performance, security assumptions, and suitability for the voting use case.</p>
+          </div>
+          </div>
+      </div>
+    </section>
+
+    <!-- ===== Footer ===== -->
+    <footer class="footer">
+      <div class="footer-content">
+        <span class="footer-name">Hoang Phuc Le</span>
+        <span class="footer-info">MSc in Computer Science (Enterprise Software Systems) · Thesis 2025–2026</span>
+        <div class="footer-links">
+          <a href="https://github.com/hoangphuc552001" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/phucle552k1/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="mailto:20115747@setu.ie">Email</a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ===================== JavaScript ===================== -->
+  <script>
+    // ===== Mobile sidebar toggle =====
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const toggle = document.getElementById('mobileToggle');
+
+    function openSidebar() {
+      sidebar.classList.add('open');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', () => {
+      sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+
+    overlay.addEventListener('click', closeSidebar);
+
+    // Close sidebar on nav link click (mobile)
+    document.querySelectorAll('.sidebar-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) closeSidebar();
+      });
+    });
+
+    // ===== Active nav link on scroll =====
+    const sections = document.querySelectorAll('.section, .hero');
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+    function setActiveLink() {
+      let current = '';
+      const scrollY = window.scrollY;
+
+      sections.forEach(section => {
+        const top = section.offsetTop - 120;
+        if (scrollY >= top) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', setActiveLink, { passive: true });
+    setActiveLink();
+
+    // ===== Subtle fade-in on scroll =====
+    const observerOptions = { threshold: 0.06, rootMargin: '0px 0px -40px 0px' };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.card, .problem-item, .tech-badge, .result-card, .future-item, .solution-highlight').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(16px)';
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      observer.observe(el);
+    });
+  </script>
+
+</body>
+
+</html>
