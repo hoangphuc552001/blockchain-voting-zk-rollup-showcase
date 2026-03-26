@@ -814,6 +814,25 @@
             confirm election integrity.</p>
         </div>
       </div>
+
+      <figure class="results-figure">
+        <figcaption class="results-figure-title">
+          <span class="results-fig-num">Fig.</span> Gas efficiency of batched voting
+        </figcaption>
+        <p class="results-figure-lead">
+          Per-vote gas cost falls sharply as batch size grows on a log scale, then levels off for very large batches —
+          consistent with amortising a fixed verification cost across many votes.
+        </p>
+        <div class="results-figure-frame">
+          <img src="images/chart-benchmark.png"
+            alt="Line chart: Gas per vote on the vertical axis versus batch size on a logarithmic horizontal axis from 1 to one million. At batch size 1, gas per vote is about 90,940; at one million votes, about 23,260. Annotation states per-vote gas drops by about 74.4 percent then stabilises for large batches."
+            loading="lazy" decoding="async" />
+        </div>
+        <div class="results-figure-caption">
+          <p><strong>Takeaway:</strong> Per-vote gas cost is optimised from about <strong>90.9k</strong> gas for a single vote to roughly <strong>23.2k–23.7k</strong> gas per vote in batched voting, with the efficiency plateau appearing at batch sizes of around <strong>500 to 1,000,000</strong> votes.</p>
+          <p class="results-figure-meta">Experimental setup: local Hardhat blockchain. Proofs generated using zk-SNARK (SnarkJS). Circuits built with Circom.</p>
+        </div>
+      </figure>
     </section>
 
     <!-- ===== Future Work ===== -->
